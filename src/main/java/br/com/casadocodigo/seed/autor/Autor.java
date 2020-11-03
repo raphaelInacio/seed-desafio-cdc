@@ -1,4 +1,4 @@
-package br.com.casadocodigo.seed.domain;
+package br.com.casadocodigo.seed.autor;
 
 
 import com.fasterxml.jackson.annotation.JsonFormat;

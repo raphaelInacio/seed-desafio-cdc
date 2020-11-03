@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.validation.Valid;
 
 @RestController
-public class Controller {
+public class AutorController {
 
     @PostMapping("/v1/autores")
     public ResponseEntity<Autor> cadastrar(@Valid @RequestBody Autor novoAutor) {
