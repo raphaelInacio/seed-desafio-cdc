@@ -32,12 +32,15 @@ public class ErrorHandler {
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseError handleValidationExceptions(
             MethodArgumentNotValidException ex) {
+
         Map<String, String> errors = new HashMap<>();
+
         ex.getBindingResult().getAllErrors().forEach((error) -> {
             String fieldName = ((FieldError) error).getField();
             String errorMessage = error.getDefaultMessage();
             errors.put(fieldName, errorMessage);
         });
+
         var responseError = new ResponseError("negocio", errors);
         responseError.setDetalhes(errors);
         return responseError;

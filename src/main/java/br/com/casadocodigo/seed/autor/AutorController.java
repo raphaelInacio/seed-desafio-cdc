@@ -3,29 +3,32 @@ package br.com.casadocodigo.seed.autor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/v1/autores")
 public class AutorController {
 
     @Autowired
-    private AutorRepository repository;
+    private AutorRepository repository; //1
 
-    @PostMapping
-    public ResponseEntity<Autor> cadastrar(@Valid @RequestBody Autor novoAutor) throws Exception {
+    @Autowired
+    private ProibeEmailDuplicadoValidator proibeEmailDuplicadoValidator; //2
 
-        Optional<Autor> esseEmailJaExiste = repository.findAutorByEmail(novoAutor.getEmail());
+    @InitBinder
+    public void init(WebDataBinder dataBinder) {
+        //3
+        dataBinder.addValidators(proibeEmailDuplicadoValidator);
+    }
 
-        if (esseEmailJaExiste.isPresent()) {
-            throw new EmailCadastraoException("E-mail já cadastrado, insira um novo e-mail");
-        }
-
-        return new ResponseEntity<>(repository.save(novoAutor), HttpStatus.OK);
+    @PostMapping //4
+    public ResponseEntity<Autor> cadastrar(@Valid @RequestBody AutorRequest request) throws Exception {
+        var autorCadastrado = repository.save(AutorMapper.mapperToModel(request)); //4
+        return new ResponseEntity<>(autorCadastrado, HttpStatus.OK); //5
     }
 
     @GetMapping

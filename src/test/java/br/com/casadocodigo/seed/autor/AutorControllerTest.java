@@ -6,17 +6,13 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.AutoConfigureOrder;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-import java.time.Instant;
-import java.util.Date;
-
-import static org.junit.jupiter.api.Assertions.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 
 class AutorControllerTest extends SeedDesafioCdcApplicationTests {
 
@@ -35,10 +31,13 @@ class AutorControllerTest extends SeedDesafioCdcApplicationTests {
 
     @Test
     void deveCadastrarAutorQuandoDadosCorretosForemEnviados() throws Exception {
+        var autor = DataBuilder.autor();
+        autor.setEmail("novo.email" + autor.getEmail());
         this.mockMvc.perform(MockMvcRequestBuilders.post("/v1/autores")
-                .content(mapper.writeValueAsString(DataBuilder.autor()))
+                .content(mapper.writeValueAsString(autor))
                 .contentType(MediaType.APPLICATION_JSON)
-        ).andExpect(MockMvcResultMatchers.status().is2xxSuccessful());
+        ).andExpect(MockMvcResultMatchers.status().is2xxSuccessful())
+                .andDo(print());
     }
 
     @Test
@@ -59,7 +58,7 @@ class AutorControllerTest extends SeedDesafioCdcApplicationTests {
         this.mockMvc.perform(MockMvcRequestBuilders.post("/v1/autores")
                 .content(mapper.writeValueAsString(autor))
                 .contentType(MediaType.APPLICATION_JSON)
-        ).andExpect(MockMvcResultMatchers.status().is4xxClientError());
+        ).andExpect(MockMvcResultMatchers.status().is4xxClientError()).andDo(print());
     }
 
     @Test
@@ -89,34 +88,24 @@ class AutorControllerTest extends SeedDesafioCdcApplicationTests {
         this.mockMvc.perform(MockMvcRequestBuilders.post("/v1/autores")
                 .content(mapper.writeValueAsString(autor))
                 .contentType(MediaType.APPLICATION_JSON)
-        ).andExpect(MockMvcResultMatchers.status().is4xxClientError());
-    }
-
-    @Test
-    void deveResponderCom400QuandoInstanteForNulo() throws Exception {
-        var autor = DataBuilder.autor();
-        autor.setInstante(null);
-        this.mockMvc.perform(MockMvcRequestBuilders.post("/v1/autores")
-                .content(mapper.writeValueAsString(autor))
-                .contentType(MediaType.APPLICATION_JSON)
-        ).andExpect(MockMvcResultMatchers.status().is4xxClientError());
+        ).andExpect(MockMvcResultMatchers.status().is4xxClientError()).andDo(print());
     }
 
     @Test
     void naoDevePermitirCadastrarEmailDuplicado() throws Exception {
 
         var autor = DataBuilder.autor();
-        var autorComEmailDuplicado = DataBuilder.autor();
+        autor.setEmail("novo.email.1" + autor.getEmail());
 
         this.mockMvc.perform(MockMvcRequestBuilders.post("/v1/autores")
                 .content(mapper.writeValueAsString(autor))
                 .contentType(MediaType.APPLICATION_JSON)
-        ).andExpect(MockMvcResultMatchers.status().is2xxSuccessful());
+        ).andExpect(MockMvcResultMatchers.status().is2xxSuccessful()).andDo(print());
 
         this.mockMvc.perform(MockMvcRequestBuilders.post("/v1/autores")
-                .content(mapper.writeValueAsString(autorComEmailDuplicado))
+                .content(mapper.writeValueAsString(autor))
                 .contentType(MediaType.APPLICATION_JSON)
-        ).andExpect(MockMvcResultMatchers.status().is4xxClientError());
+        ).andExpect(MockMvcResultMatchers.status().is4xxClientError()).andDo(print());
     }
 
 }
