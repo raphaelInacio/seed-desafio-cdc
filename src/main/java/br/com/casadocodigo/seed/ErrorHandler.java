@@ -1,4 +1,4 @@
-package br.com.casadocodigo.seed.autor;
+package br.com.casadocodigo.seed;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.FieldError;
@@ -10,16 +10,6 @@ import java.util.Map;
 
 @RestControllerAdvice
 public class ErrorHandler {
-
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ExceptionHandler(EmailCadastraoException.class)
-    public ResponseError handleValidationExceptions(EmailCadastraoException ex) {
-        Map<String, String> errors = new HashMap<>();
-        var responseError = new ResponseError();
-        errors.put("email", ex.getMessage());
-        responseError.setTipo("negócio");
-        return new ResponseError("Erro de negócio capturado", errors);
-    }
 
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler(Exception.class)

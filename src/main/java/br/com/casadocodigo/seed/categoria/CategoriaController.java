@@ -13,10 +13,10 @@ import javax.validation.Valid;
 public class CategoriaController {
 
     @Autowired
-    private CategoriaRepository repository;
+    private CategoriaRepository repository; //1
 
     @Autowired
-    private CategoriaDuplicadaValidator categoriaDuplicadaValidator;
+    private CategoriaDuplicadaValidator categoriaDuplicadaValidator; //2
 
     @InitBinder
     public void init(WebDataBinder dataBinder) {
@@ -24,8 +24,10 @@ public class CategoriaController {
     }
 
     @PostMapping
+    //3
+    //4
     public ResponseEntity<Categoria> cadastrar(@Valid @RequestBody CategoriaRequest request) throws Exception {
-        var categorria = repository.save(CategoriaMapper.mapperToModel(request)); //4
-        return new ResponseEntity<>(categorria, HttpStatus.OK); //5
+        var categoria = repository.save(CategoriaMapper.mapperToModel(request));
+        return new ResponseEntity<>(categoria, HttpStatus.OK);
     }
 }

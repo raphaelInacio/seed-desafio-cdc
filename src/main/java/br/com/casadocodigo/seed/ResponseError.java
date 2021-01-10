@@ -1,4 +1,4 @@
-package br.com.casadocodigo.seed.autor;
+package br.com.casadocodigo.seed;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -10,6 +10,6 @@ import java.util.Map;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ResponseError {
-    private String tipo;
+    private String tipoErro;
     Map<String, String> detalhes;
 }

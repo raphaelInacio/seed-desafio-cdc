@@ -30,7 +30,7 @@ public class CategoriaDuplicadaValidator implements Validator {
 
 
         if (categoriaExiste.isPresent()) {
-            errors.rejectValue("email", "{email.duplcado}");
+            errors.rejectValue("email", "Categoria já cadastrada, informe uma nova categoria");
         }
     }
 }

@@ -26,7 +26,7 @@ public class Autor {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
-    @JsonFormat(pattern = "yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd", shape = JsonFormat.Shape.STRING)
     @NotNull
     private LocalDateTime instante = LocalDateTime.now();
 
